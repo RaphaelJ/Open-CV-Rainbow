@@ -1,0 +1,6 @@
+OpenCV Rainbow is a simple Python utility to compose OpenCV filters in 
+real-time.
+
+USAGE
+
+python2 main.py
