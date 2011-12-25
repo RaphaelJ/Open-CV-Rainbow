@@ -5,7 +5,7 @@
 import sys, cv2
 from PyQt4 import QtGui
 
-class Rainbow(QtGui.QMainWindow):
+class Images(QtGui.QWidget):
     IMAGES_WIDTH, IMAGES_HEIGHT = 400.0, 300.0
     
     # Source image (OpenCV)
@@ -157,11 +157,3 @@ class Rainbow(QtGui.QMainWindow):
         )
 
         qt_label.setPixmap(QtGui.QPixmap.fromImage(qt_img))
-
-if __name__ == '__main__':
-    app = QtGui.QApplication(sys.argv)
-
-    w = Rainbow()
-    w.show()
-    
-    sys.exit(app.exec_())
