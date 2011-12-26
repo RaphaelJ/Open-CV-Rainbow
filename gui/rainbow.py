@@ -86,9 +86,7 @@ class Rainbow(QtGui.QMainWindow):
         self.filter_properties = FilterProperties()
         self._filters_grid.addWidget(self.filter_properties, 1, 1, 1, 1)
 
-        grid_widget = QtGui.QWidget()
-        grid_widget.setLayout(self._filters_grid)
-        self._vbox.addWidget(grid_widget)
+        self._vbox.addLayout(self._filters_grid)
 
     def _open_image(self):
         """ Opens a File Dialog to select an image and displays it """

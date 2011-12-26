@@ -58,9 +58,8 @@ class Images(QtGui.QWidget):
         def put_in_groupbox(widget, title):
             """ Puts a single widget inside a titled QGroupBox """
             box = QtGui.QGroupBox(title)
-            layout = QtGui.QHBoxLayout()
+            layout = QtGui.QHBoxLayout(box)
             layout.addWidget(widget)
-            box.setLayout(layout)
             return box
         
         def set_label_size(qt_label):
@@ -71,13 +70,13 @@ class Images(QtGui.QWidget):
                 Images.IMAGES_WIDTH, Images.IMAGES_HEIGHT
             )
         
-        self._hbox = QtGui.QHBoxLayout()
+        self._hbox = QtGui.QHBoxLayout(self)
         self._hbox.setSizeConstraint(QtGui.QLayout.SetMinimumSize)
 
         self._source_label = ClickableLabel()
         self.connect(
             self._source_label, SIGNAL('clicked()'),
-            lambda: Images.full_size_image(self.source)
+            lambda: self.full_size_image(self.source)
         )
         set_label_size(self._source_label)
         self._hbox.addWidget(put_in_groupbox(self._source_label, "Source"))
@@ -85,15 +84,12 @@ class Images(QtGui.QWidget):
         self._result_label = ClickableLabel()
         self.connect(
             self._result_label, SIGNAL('clicked()'),
-            lambda: Images.full_size_image(self.result)
+            lambda: self.full_size_image(self.result)
         )
         set_label_size(self._result_label)
         self._hbox.addWidget(put_in_groupbox(self._result_label, "Result"))
-        
-        self.setLayout(self._hbox)
 
-    @staticmethod
-    def full_size_image(cv_image):
+    def full_size_image(self, cv_image):
         """ Displays an image within a QDialog """
         if cv_image != None:
             dialog = QtGui.QDialog(self._rainbow)
@@ -102,9 +98,8 @@ class Images(QtGui.QWidget):
             label = QtGui.QLabel()
             Images._display_cv_image(label, cv_image, resize=False)
 
-            layout = QtGui.QHBoxLayout()
+            layout = QtGui.QHBoxLayout(dialog)
             layout.addWidget(label)
-            dialog.setLayout(layout)
             
             dialog.exec_()
 

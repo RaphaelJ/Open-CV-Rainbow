@@ -17,21 +17,18 @@ class AvailableFilters(QtGui.QGroupBox):
         self._init_hbox()
         
     def _init_hbox(self):
-        self._hbox = QtGui.QHBoxLayout()
+        self._hbox = QtGui.QHBoxLayout(self)
         self._hbox.setAlignment(Qt.AlignTop)
-        self.setLayout(self._hbox)
 
         self._init_filters_list()
         self._init_buttons_vbox()
 
     def _init_filters_list(self):
         self._filters_list = QtGui.QListWidget()
-
         self._filters_list.setSelectionMode(
             QtGui.QAbstractItemView.SingleSelection
         )
         self._hbox.addWidget(self._filters_list)
-
 
     def _init_buttons_vbox(self):
         self._buttons_vbox = QtGui.QVBoxLayout()
@@ -42,6 +39,4 @@ class AvailableFilters(QtGui.QGroupBox):
         )
         self._buttons_vbox.addWidget(self.add)
 
-        vbox_widget = QtGui.QWidget()
-        vbox_widget.setLayout(self._buttons_vbox)
-        self._hbox.addWidget(vbox_widget)
+        self._hbox.addLayout(self._buttons_vbox)

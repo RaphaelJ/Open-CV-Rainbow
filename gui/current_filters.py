@@ -17,8 +17,7 @@ class CurrentFilters(QtGui.QGroupBox):
         self._init_hbox()
         
     def _init_hbox(self):
-        self._hbox = QtGui.QHBoxLayout()
-        self.setLayout(self._hbox)
+        self._hbox = QtGui.QHBoxLayout(self)
 
         self._init_filters_list()
         self._init_buttons_vbox()
@@ -50,12 +49,10 @@ class CurrentFilters(QtGui.QGroupBox):
         )
         self._buttons_vbox.addWidget(self.down)
 
-        vbox_widget = QtGui.QWidget()
-        vbox_widget.setLayout(self._buttons_vbox)
-        self._hbox.addWidget(vbox_widget)
+        self._hbox.addLayout(self._buttons_vbox)
 
-class FilterModel(QtGui.QAbstractListModel):
-    pass
+#class FilterModel(QtGui.QAbstractListModel):
+    #pass
 
 class FilterDelegate(QtGui.QStyledItemDelegate):
     """
