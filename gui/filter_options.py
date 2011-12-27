@@ -7,12 +7,12 @@ import sys, cv2
 from PyQt4 import QtGui
 from PyQt4.QtCore import Qt
 
-class FilterProperties(QtGui.QGroupBox):
+class FilterOptions(QtGui.QGroupBox):
     """
-        Widget which displays a form to edit filter properties in real time.
+        Widget which displays a form to edit filter options in real time.
     """    
     def __init__(self):
-        super(FilterProperties, self).__init__("Filter properties")
+        super(FilterOptions, self).__init__("Filter options")
 
         self.setVisible(False)
 

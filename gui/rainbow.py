@@ -8,7 +8,7 @@ from PyQt4 import QtGui
 from images import Images
 from current_filters import CurrentFilters
 from available_filters import AvailableFilters
-from filter_properties import FilterProperties
+from filter_options import FilterOptions
 
 class Rainbow(QtGui.QMainWindow):
     def __init__(self):
@@ -83,8 +83,8 @@ class Rainbow(QtGui.QMainWindow):
         self.available_filters = AvailableFilters()
         self._filters_grid.addWidget(self.available_filters, 0, 1, 1, 1)
 
-        self.filter_properties = FilterProperties()
-        self._filters_grid.addWidget(self.filter_properties, 1, 1, 1, 1)
+        self.filter_options = FilterOptions()
+        self._filters_grid.addWidget(self.filter_options, 1, 1, 1, 1)
 
         self._vbox.addLayout(self._filters_grid)
 
