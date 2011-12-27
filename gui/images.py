@@ -3,8 +3,7 @@
 # Raphael Javaux <raphaeljavaux@gmail.com> - December 2011
 
 import sys, cv2
-from PyQt4 import QtGui
-from PyQt4.QtCore import *  
+from PyQt4 import QtGui, QtCore
 
 class Images(QtGui.QWidget):
     """ Widget which shows the source and the result image """
@@ -53,7 +52,7 @@ class Images(QtGui.QWidget):
         class ClickableLabel(QtGui.QLabel):
             """ A simple QLabel which emits the clicked event """
             def mouseReleaseEvent(self, ev):
-                self.emit(SIGNAL('clicked()')) 
+                self.emit(QtCore.SIGNAL('clicked()')) 
         
         def put_in_groupbox(widget, title):
             """ Puts a single widget inside a titled QGroupBox """
@@ -75,7 +74,7 @@ class Images(QtGui.QWidget):
 
         self._source_label = ClickableLabel()
         self.connect(
-            self._source_label, SIGNAL('clicked()'),
+            self._source_label, QtCore.SIGNAL('clicked()'),
             lambda: self.full_size_image(self.source)
         )
         set_label_size(self._source_label)
@@ -83,7 +82,7 @@ class Images(QtGui.QWidget):
         
         self._result_label = ClickableLabel()
         self.connect(
-            self._result_label, SIGNAL('clicked()'),
+            self._result_label, QtCore.SIGNAL('clicked()'),
             lambda: self.full_size_image(self.result)
         )
         set_label_size(self._result_label)

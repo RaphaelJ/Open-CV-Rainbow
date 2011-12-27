@@ -4,3 +4,8 @@ real-time.
 USAGE
 
 python2 main.py
+
+FILTERS
+
+You can add your own filters by subclassing filters.Filter and by registering
+the new filter in filters/__init__.py.
