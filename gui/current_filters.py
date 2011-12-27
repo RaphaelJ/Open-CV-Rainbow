@@ -81,7 +81,7 @@ class FilterDelegate(QtGui.QItemDelegate):
         -           Options                        -
         --------------------------------------------
     """
-    THUMBS_WIDTH, THUMBS_HEIGHT = 40.0, 30.0
+    THUMBS_WIDTH, THUMBS_HEIGHT = 80.0, 60.0
     MARGIN = 5 # Borders margin
     SPACING = 7 # Space between elements
 
@@ -90,21 +90,29 @@ class FilterDelegate(QtGui.QItemDelegate):
         
         title_font, details_font = FilterDelegate.fonts()
         
-        thumb_rect, title_rect, name_rect, rendering_rect, options_rect = \
+        thumb_rect, title_rect, details_rect, options_rect = \
             FilterDelegate.layout(filter_, title_font, details_font)
         
         bounds = thumb_rect.united(title_rect)\
-                           .united(name_rect)\
-                           .united(rendering_rect)\
+                           .united(details_rect)\
                            .united(options_rect)
-        
-        return bounds.size()
+
+        right_and_bottom_margins = QtCore.QSize(
+            FilterDelegate.MARGIN,
+            FilterDelegate.MARGIN * 2 # FIXME: 1*MARGIN for height is not enough
+        )
+        return bounds.size() + right_and_bottom_margins
     
     def paint(self, painter, option, index):
         filter_ = index.data(Qt.DisplayRole).toPyObject()
-        
         title_font, details_font = FilterDelegate.fonts()
         
+        # We are drawing in the list view widget, so we need to do the stuff
+        # inside a temporary pixmap and finally draw the pixmap on the cell's
+        # rectangle. option.rect's size is at least sizeHint
+        pixmap = QtGui.QPixmap(option.rect.size())
+        pixmap_painter = QtGui.QPainter(pixmap)
+
         # Gets colors for the current widget's status
         palette = option.palette
         if option.state & QtGui.QStyle.State_Selected:
@@ -123,15 +131,31 @@ class FilterDelegate(QtGui.QItemDelegate):
             )
 
         # Draws the background
-        painter.fillRect(option.rect, bg_color)
+        pixmap.fill(bg_color)
         
         # Compute layout
-        thumb_rect, title_rect, name_rect, rendering_rect, options_rect = \
+        thumb_rect, title_rect, details_rect, options_rect = \
             FilterDelegate.layout(filter_, title_font, details_font)
+
+        # Sets texts color
+        pixmap_painter.setPen(fg_color)
         
         # Draws the filter's title
-        painter.setFont(title_font)
-        painter.drawText(title_rect, 0, filter_.title)
+        pixmap_painter.setFont(title_font)
+        pixmap_painter.drawText(title_rect, 0, filter_.title)
+
+        pixmap_painter.setFont(details_font)
+
+        # Draws the filter's details (name and rendering time)
+        pixmap_painter.drawText(details_rect, 0, filter_.details)
+
+        # Draws the filter's options
+        pixmap_painter.drawText(options_rect, 0, filter_.options_str)
+        
+        pixmap_painter.end()
+
+        # Draws the pixmap inside the cell
+        painter.drawPixmap(option.rect, pixmap)
 
     @staticmethod
     def fonts():
@@ -159,30 +183,20 @@ class FilterDelegate(QtGui.QItemDelegate):
             QtGui.QFontMetrics(title_font).size(0, filter_.title)
         )
         
-        name_rect = QtCore.QRect(
+        details_rect = QtCore.QRect(
             QtCore.QPoint(
                 thumb_rect.right() + FilterDelegate.MARGIN,
                 title_rect.bottom() + FilterDelegate.SPACING
             ),
-            QtGui.QFontMetrics(details_font).size(0, filter_.name)
-        )
-        
-        rendering_rect = QtCore.QRect(
-            QtCore.QPoint(
-                name_rect.right() + FilterDelegate.SPACING,
-                title_rect.bottom() + FilterDelegate.SPACING
-            ),
-            QtGui.QFontMetrics(details_font).size(
-                0, str(filter_.rendering_time)
-            )
+            QtGui.QFontMetrics(details_font).size(0, filter_.details)
         )
         
         options_rect = QtCore.QRect(
             QtCore.QPoint(
                 thumb_rect.right() + FilterDelegate.MARGIN,
-                name_rect.bottom() + FilterDelegate.SPACING
+                details_rect.bottom() + FilterDelegate.SPACING
             ),
-            QtGui.QFontMetrics(details_font).size(0, str(filter_.options))
+            QtGui.QFontMetrics(details_font).size(0, filter_.options_str)
         )
         
-        return thumb_rect, title_rect, name_rect, rendering_rect, options_rect
+        return thumb_rect, title_rect, details_rect, options_rect

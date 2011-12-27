@@ -145,5 +145,6 @@ class Images(QtGui.QWidget):
         qt_img = Images.cv_image_to_qt_image(
             Images.resize_for_interface(cv_img) if resize else cv_img
         )
-
+        
+        qt_label.setAlignment(QtCore.Qt.AlignCenter);
         qt_label.setPixmap(QtGui.QPixmap.fromImage(qt_img))
